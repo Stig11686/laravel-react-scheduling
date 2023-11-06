@@ -21,18 +21,50 @@ import {
 } from "@heroicons/react/20/solid";
 
 const navigation = [
-    { name: "Dashboard", href: "#", icon: HomeIcon, current: true },
-    { name: "Courses", href: "/courses", icon: UsersIcon, current: false },
-    { name: "Cohorts", href: "/cohorts", icon: FolderIcon, current: false },
-    { name: "Sessions", href: "/sessions", icon: CalendarIcon, current: false },
-    { name: "Users", href: "/users", icon: UsersIcon, current: false },
-    { name: "Schedule", href: "/schedule", icon: CalendarIcon, current: false },
+    {
+        name: "Dashboard",
+        href: "/",
+        icon: HomeIcon,
+        current: true,
+        roles: ["any"],
+    },
+    {
+        name: "Courses",
+        href: "/courses",
+        icon: UsersIcon,
+        current: false,
+        roles: ["super-admin", "admin"],
+    },
+    {
+        name: "Cohorts",
+        href: "/cohorts",
+        icon: FolderIcon,
+        current: false,
+        roles: ["super-admin", "admin"],
+    },
+    {
+        name: "Sessions",
+        href: "/sessions",
+        icon: CalendarIcon,
+        current: false,
+        roles: ["super-admin", "admin"],
+    },
+    {
+        name: "Users",
+        href: "/users",
+        icon: UsersIcon,
+        current: false,
+        roles: ["super-admin", "admin"],
+    },
+    {
+        name: "Schedule",
+        href: "/schedule",
+        icon: CalendarIcon,
+        current: false,
+        roles: ["any"],
+    },
 ];
-const teams = [
-    { id: 1, name: "Heroicons", href: "#", initial: "H", current: false },
-    { id: 2, name: "Tailwind Labs", href: "#", initial: "T", current: false },
-    { id: 3, name: "Workcation", href: "#", initial: "W", current: false },
-];
+
 const userNavigation = [
     { name: "Your profile", href: "#" },
     { name: "Sign out", href: "#" },
@@ -43,7 +75,8 @@ function classNames(...classes) {
 }
 
 function DefaultLayout() {
-    const { user, token, setUser } = useStateContext();
+    const { user, token, setUser, setUserRoles, setUserPermissions } =
+        useStateContext();
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
     if (!token) {
@@ -55,10 +88,27 @@ function DefaultLayout() {
     }
 
     useEffect(() => {
-        axios.get("/user").then(({ data }) => {
-            setUser(data.user);
-        });
+        axios
+            .get("/user")
+            .then(({ data }) => {
+                setUser(data.data);
+                setUserRoles(data.data.roles);
+                setUserPermissions(data.data.permissions);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     }, []);
+
+    const userRoles = user && user.roles ? user.roles : [];
+
+    const filteredNavigation = navigation.filter((item) => {
+        // Include items with 'any' role or items that match user roles
+        return (
+            item.roles.includes("any") ||
+            item.roles.some((role) => userRoles.includes(role))
+        );
+    });
 
     return (
         <>
@@ -138,7 +188,7 @@ function DefaultLayout() {
                                                         role="list"
                                                         className="-mx-2 space-y-1"
                                                     >
-                                                        {navigation.map(
+                                                        {filteredNavigation.map(
                                                             (item) => (
                                                                 <li
                                                                     key={
@@ -207,7 +257,7 @@ function DefaultLayout() {
                             >
                                 <li>
                                     <ul role="list" className="-mx-2 space-y-1">
-                                        {navigation.map((item) => (
+                                        {filteredNavigation.map((item) => (
                                             <li key={item.name}>
                                                 <a
                                                     href={item.href}
@@ -300,7 +350,7 @@ function DefaultLayout() {
                                         <span className="sr-only">
                                             Open user menu
                                         </span>
-                                        {user.avatar ? (
+                                        {/* {user.avatar ? (
                                             <img
                                                 className="h-8 w-8 rounded-full bg-gray-50"
                                                 src="{user.avatar || ''}"
@@ -308,7 +358,7 @@ function DefaultLayout() {
                                             />
                                         ) : (
                                             "SM"
-                                        )}
+                                        )} */}
                                         <span className="hidden lg:flex lg:items-center">
                                             <span
                                                 className="ml-4 text-sm font-semibold leading-6 text-gray-900"

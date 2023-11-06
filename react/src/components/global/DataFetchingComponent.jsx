@@ -8,12 +8,7 @@ import CreateEntityModal from "./CreateEntityModal";
 import axios from "../../../axios";
 import { useState } from "react";
 
-function DataFetchingComponent({
-    endpoint,
-    title,
-    createEntityFields,
-    selectedFields,
-}) {
+function DataFetchingComponent({ endpoint, title, createEntityFields }) {
     const [page, setPage] = useState(1);
     const { data, setData, error, loading, pagination } = useDataFetching(
         endpoint,
@@ -71,23 +66,37 @@ function DataFetchingComponent({
     };
 
     const createEntity = async (e, formData) => {
-        e.preventDefault();
-        // Send a POST request to your API endpoint to create a new course
-        try {
-            const response = await axios
-                .post(endpoint, formData, {
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                })
-                .then((resp) => {
-                    setMessage({
-                        message: resp.data.message,
-                        type: "success",
-                    });
+        let apiMethod = "post"; // Default to POST request
+        let apiEndpoint = endpoint;
 
-                    setData([...data, resp.data.data]);
+        if (modalMode === "edit") {
+            apiMethod = "put";
+            apiEndpoint = `${endpoint}/${formData.id}`;
+        }
+
+        try {
+            const response = await axios[apiMethod](apiEndpoint, formData, {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            setMessage({
+                message: response.data.message,
+                type: "success",
+            });
+
+            if (modalMode === "edit") {
+                // If in edit mode, update the specific item in the data array
+                setData((prevData) => {
+                    return prevData.map((item) =>
+                        item.id === formData.id ? response.data.data : item
+                    );
                 });
+            } else {
+                // If in create mode, add the new item to the data array
+                setData((prevData) => [...prevData, response.data.data]);
+            }
         } catch (error) {
             const { errors } = error.response.data;
 
@@ -128,8 +137,8 @@ function DataFetchingComponent({
                 modalMode={modalMode}
                 entityData={modalData}
                 fields={createEntityFields}
-                selectedFields={selectedFields}
                 onDelete={onDelete}
+                onSubmit={createEntity}
             />
             {pagination && (
                 <PaginationComponent

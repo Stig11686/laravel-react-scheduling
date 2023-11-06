@@ -22,9 +22,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::with('roles')->where('id', '<>', auth()->user()->id)->paginate(50);
+        $users = User::with('roles', 'permissions')->where('id', '<>', auth()->user()->id)->paginate(50);
 
-        return Inertia::render('Admin/Users/Users', compact('users'));
+        return response()->json(['data' => new UserCollection($users)]);
     }
 
     /**

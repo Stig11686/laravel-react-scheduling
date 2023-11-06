@@ -5,9 +5,13 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\V1\CourseController;
 use App\Http\Controllers\Api\V1\CohortController;
+use App\Http\Controllers\Api\V1\CohortSessionController;
 use App\Http\Controllers\Api\V1\SessionController;
 use App\Http\Controllers\Api\V1\ScheduleController;
+use App\Http\Controllers\Api\V1\TrainerController;
 use App\Http\Controllers\Api\V1\UserController;
+use App\Http\Controllers\Api\V1\ZoomRoomController;
+use App\Http\Resources\UserResource;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,28 +24,29 @@ use App\Http\Controllers\Api\V1\UserController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    $user = $request->user();
-    $user->load('roles');
 
-    $user = [
-        'id' => $user->id,
-        'name' => $user->name,
-        'email' => $user->email,
-        'roles' => $user->roles
-    ];
 
-    return response()->json(['user' => $user]);
+Route::post('/login', [AuthController::class, 'login'])->name('login');
 
-});
 
-Route::post('/login', [AuthController::class, 'login']);
-Route::post('/logout', [AuthController::class, 'logout']);
 
-Route::group([], function(){
+
+
+Route::middleware('auth:sanctum')->group(function(){
+    Route::get('/user', function (Request $request) {
+        $user = $request->user();
+        $user->load('roles', 'permissions'); // Eager load roles and permissions
+
+        return new UserResource( $user );
+    });
+
+    Route::post('/logout', [AuthController::class, 'logout']);
     Route::resource('/courses', CourseController::class);
     Route::resource('/cohorts', CohortController::class);
     Route::resource('/sessions', SessionController::class);
     Route::resource('/schedule', ScheduleController::class);
+    Route::resource('/trainers', TrainerController::class);
+    Route::resource('/zoom_rooms', ZoomRoomController::class);
+    Route::resource('/cohort_session', CohortSessionController::class);
     Route::resource('/users', UserController::class);
 });

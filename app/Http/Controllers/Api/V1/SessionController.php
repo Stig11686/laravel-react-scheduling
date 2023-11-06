@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SessionRequest;
 use App\Http\Resources\SessionCollection;
 use App\Http\Resources\SessionResource;
 use App\Models\Session;
@@ -29,6 +30,25 @@ class SessionController extends Controller {
     public function show(Session $session){
         return response()->json(['data' => new SessionResource( $session )])
         ->header('Access-Control-Allow-Origin', 'http://localhost:3000');
+    }
+
+    public function update(SessionRequest $request){
+        $session = Session::find($request->id);
+
+        if (!$session) {
+            return response()->json(['message' => 'Session not found'], 404);
+        }
+
+        $session->update([
+            'name' => $request->input('name'),
+            'trainer_notes' => $request->input('trainer_notes'),
+            'slides' => $request->input('slides'),
+            'review_status' => $request->input('review_status'),
+            'review_due' => $request->input('review_due')
+        ]);
+
+        return response()->json(['message' => $session->name . ' updated successfully', 'data' => new SessionResource( $session )], 200);
+
     }
 
     public function destroy(Session $session){
