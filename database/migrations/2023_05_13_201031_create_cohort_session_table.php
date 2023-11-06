@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('cohort_id')->constrained()->cascadeOnDelete();
             $table->foreignId('session_id')->constrained()->cascadeOnDelete();
-            $table->dateTime('date')->nullable();
+            $table->date('date')->nullable();
             $table->foreignId('trainer_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('zoom_room_id')->nullable()->constrained()->nullOnDelete();
             $table->timestamps();

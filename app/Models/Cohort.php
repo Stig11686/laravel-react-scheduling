@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Http\Resources\CohortSessionResource;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+
 
 class Cohort extends Model
 {
@@ -26,7 +28,18 @@ class Cohort extends Model
         return $this->hasMany(Learner::class);
     }
 
-    public function cohortSession(){
-        return $this->hasMany(CohortSession::class);
+    public function cohortSession()
+    {
+        return $this->hasMany(CohortSession::class)->orderBy('date', 'asc');
+    }
+
+    public function getFormattedSchedule()
+    {
+        return [
+            'id' => $this->id,
+            'course_name' => $this->course->name,
+            'cohort_name' => $this->name,
+            //'sessions' => CohortSessionResource::collection($this->cohortSession),
+        ];
     }
 }

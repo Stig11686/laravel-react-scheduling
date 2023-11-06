@@ -11,6 +11,7 @@ import Session from "./views/Session";
 import Schedule from "./views/Schedule";
 import Dashboard from "./views/Dashboard";
 import NotFound from "./views/404";
+import PrivateRoute from "./components/PrivateRoute";
 
 const router = createBrowserRouter([
     {

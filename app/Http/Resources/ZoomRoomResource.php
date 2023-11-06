@@ -15,8 +15,10 @@ class ZoomRoomResource extends JsonResource
      */
     public function toArray($request)
     {
-        $zoom_room = ZoomRoom::where('id', $this->resource)->pluck('link');
-
-        return $zoom_room;
+        return [
+            'id' => $this->id,
+            'link' => $this->link,
+            'name' => $this->name
+        ];
     }
 }

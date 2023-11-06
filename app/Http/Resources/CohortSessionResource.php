@@ -3,8 +3,6 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Models\ZoomRoom;
-use App\Models\Trainer;
 
 class CohortSessionResource extends JsonResource
 {
@@ -19,11 +17,17 @@ class CohortSessionResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->session->name,
+            'session_id' => $this->session->id,
+            'cohort_id' => $this->cohort_id,
+            'cohort_name' => $this->cohort->name,
+            'course_name' => $this->cohort->course->name,
             'date' => $this->date,
             'slides' => $this->session->slides,
             'trainer_notes' => $this->session->trainer_notes,
             'zoom_room' => $this->zoom_room ? $this->zoom_room->link : null,
-            'trainer' => $this->trainer ? $this->trainer->user->name : null
+            'zoom_room_id' => $this->zoom_room ? $this->zoom_room->id : null,
+            'trainer' => $this->trainer ? $this->trainer->user->name : null,
+            'trainer_id' => $this->trainer ? $this->trainer->id : null
         ];
     }
 }

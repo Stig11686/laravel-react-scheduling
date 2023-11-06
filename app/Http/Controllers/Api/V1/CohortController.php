@@ -45,6 +45,25 @@ class CohortController extends Controller {
         return response()->json(['data' => new CohortResource($cohort), 'message' => 'Cohort successfully created']);
     }
 
+    public function update(CohortRequest $request){
+        $cohort = Cohort::find($request->id);
+
+        if (!$cohort) {
+            return response()->json(['message' => 'Cohort not found'], 404);
+        }
+
+        $cohort->update([
+            'name' => $request->input('name'),
+            'course_id' => $request->input('course_id'),
+            'start_date' => $request->input('start_date'),
+            'end_date' => $request->input('end_date'),
+            'place' => $request->input('places')
+        ]);
+
+        return response()->json(['message' => 'Cohort Updated Successfully', 'data' => new CohortResource( $cohort )], 200);
+
+    }
+
     public function destroy(Cohort $cohort){
         $cohort = Cohort::find($cohort->id);
 

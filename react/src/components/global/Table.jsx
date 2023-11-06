@@ -72,6 +72,12 @@ function formatData(column, value) {
     }
 }
 
+function formatHeadings(inputString) {
+    // Use regular expression to replace underscores and dashes with spaces
+    const modifiedString = inputString.replace(/[_-]/g, " ");
+    return modifiedString;
+}
+
 function Table({ data, onRowClick }) {
     if (!data || data.length === 0) {
         return <p>No data available</p>;
@@ -95,14 +101,18 @@ function Table({ data, onRowClick }) {
                                 key={column.name}
                                 className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider"
                             >
-                                {column.name}
+                                {formatHeadings(column.name)}
                             </th>
                         ))}
                     </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                     {data.map((item) => (
-                        <tr key={item.id} onClick={() => handleRowClick(item)}>
+                        <tr
+                            className="cursor-pointer"
+                            key={item.id}
+                            onClick={() => handleRowClick(item)}
+                        >
                             {columns.map((column) => (
                                 <td
                                     key={column.name}

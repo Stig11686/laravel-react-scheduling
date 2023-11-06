@@ -28,6 +28,21 @@ class CourseController extends Controller {
         return response()->json(['message' => 'Course created successfully', 'data' => $course]);
     }
 
+    public function update(CourseRequest $request){
+        $course = Course::find($request->id);
+
+        if (!$course) {
+            return response()->json(['message' => 'Course not found'], 404);
+        }
+
+        $course->update([
+            'name' => $request->input('name')
+        ]);
+
+        return response()->json(['data' => $course], 200);
+
+    }
+
     public function destroy(Course $course){
         $course = Course::find($course->id);
 

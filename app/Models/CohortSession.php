@@ -11,6 +11,8 @@ class CohortSession extends Model
 
     public $table = 'cohort_session';
 
+    protected $fillable = ['cohort_id', 'date', 'trainer_id', 'session_id', 'zoom_room_id'];
+
     public function trainer(){
         return $this->belongsTo(Trainer::class);
     }

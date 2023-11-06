@@ -8,12 +8,11 @@ function CreateEntityModal({
     entityData,
     onDelete,
     modalMode,
-    selectedFields,
 }) {
     const [formData, setFormData] = useState(entityData || {});
 
     useEffect(() => {
-        setFormData({ ...entityData, ...selectedFields });
+        setFormData({ ...entityData });
     }, [entityData]);
 
     const handleInputChange = (e) => {
@@ -33,9 +32,10 @@ function CreateEntityModal({
         onClose();
     };
 
-    const renderField = (field, selectedValues = selectedFields) => {
+    const renderField = (field) => {
         //console.log(field, formData);
         if (field.type === "select" && field.options) {
+            console.log(field.name, formData[field.name]);
             return (
                 <select
                     id={field.name}
@@ -90,6 +90,12 @@ function CreateEntityModal({
                 >
                     &times;
                 </span>
+
+                <h2 className="text-2xl mb-4">
+                    {modalMode === "edit"
+                        ? `Edit ${formData.name}`
+                        : "Create Component"}
+                </h2>
                 <form onSubmit={handleSubmit}>
                     {renderFormFields(fields)}
                     <div className="flex gap-x-4">
