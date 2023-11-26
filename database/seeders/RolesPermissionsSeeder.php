@@ -62,6 +62,7 @@ class RolesPermissionsSeeder extends Seeder
             ['name' => 'trainer_edit', 'guard_name' => 'web'],
             ['name' => 'trainer_delete', 'guard_name' => 'web'],
             ['name' => 'trainer_show', 'guard_name' => 'web'],
+            ['name' => 'view_admin_area', 'guard_name' => 'web']
         ];
 
         foreach($permissions as $permission){

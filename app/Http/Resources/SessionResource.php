@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use App\Models\Session;
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\TaskCollection;
 
 class SessionResource extends JsonResource
 {
@@ -22,6 +23,8 @@ class SessionResource extends JsonResource
         'slides' => $this->slides,
         'review_status' => $this->review_status,
         'review_due' => $this->review_due,
+        'tasks' => new TaskCollection( $this->tasks ),
+        'array_selected_id' => $this->tasks->pluck('id') ? $this->tasks->pluck('id') : []
        ];
     }
 }

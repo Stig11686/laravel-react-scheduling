@@ -18,6 +18,6 @@ class Session extends Model
 
     public function tasks()
     {
-        return $this->hasMany(Task::class);
+        return $this->belongsToMany(Task::class, 'session_task', 'session_id', 'task_id');
     }
 }

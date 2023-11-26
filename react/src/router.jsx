@@ -11,7 +11,8 @@ import Session from "./views/Session";
 import Schedule from "./views/Schedule";
 import Dashboard from "./views/Dashboard";
 import NotFound from "./views/404";
-import PrivateRoute from "./components/PrivateRoute";
+import Tasks from "./views/Tasks";
+import Task from "./views/Task";
 
 const router = createBrowserRouter([
     {
@@ -39,8 +40,16 @@ const router = createBrowserRouter([
                 element: <Cohorts />,
             },
             {
-                path: "/cohorts:id",
+                path: "/cohorts/:id",
                 element: <Cohort />,
+            },
+            {
+                path: "/tasks",
+                element: <Tasks />,
+            },
+            {
+                path: "/tasks:id",
+                element: <Task />,
             },
             {
                 path: "/sessions",

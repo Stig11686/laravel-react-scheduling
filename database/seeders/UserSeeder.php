@@ -47,7 +47,8 @@ class UserSeeder extends Seeder
 
         Learner::create([
             'user_id' => $trainer->id,
-            'cohort_id' => 1
+            'cohort_id' => 1,
+            'trainer_id' => 1
         ]);
 
         $cohort_one = Cohort::find(1);
@@ -58,18 +59,6 @@ class UserSeeder extends Seeder
         $users = User::factory(200)->create([
             'password' => Hash::make('password')
         ]);
-        $learnerUsers = $users->skip(20)->take(180);
-        foreach ($learnerUsers as $user) {
-            // Create a learner entry
-            $cohort = $cohorts->where('places', '>', 0)->random();
-            $learner = Learner::create([
-                'user_id' => $user->id,
-                'cohort_id' => $cohort->id
-            ]);
-
-            $cohort->decrement('places');
-            $user->assignRole('learner');
-        }
 
         // Create trainer users
         $trainerUsers = $users->take(20);
@@ -79,6 +68,20 @@ class UserSeeder extends Seeder
                 'has_dbs' => 1
             ]);
             $user->assignRole('trainer');
+        }
+
+        $learnerUsers = $users->skip(20)->take(180);
+        foreach ($learnerUsers as $user) {
+            // Create a learner entry
+            $cohort = $cohorts->where('places', '>', 0)->random();
+            $learner = Learner::create([
+                'user_id' => $user->id,
+                'cohort_id' => $cohort->id,
+                'trainer_id' => 2
+            ]);
+
+            $cohort->decrement('places');
+            $user->assignRole('learner');
         }
     }
 }

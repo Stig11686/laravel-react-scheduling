@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class UserResource extends JsonResource
+class LearnerResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -14,19 +14,13 @@ class UserResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $roles = $this->whenLoaded('roles') ? $this->roles->pluck('name') : [];
-        $permissions = $this->whenLoaded('roles', function(){
-            return $this->roles->flatMap->permissions->pluck('name')->unique();
-            ;
-        });
-
         return [
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
-            'roles' => $roles,
-            'permissions' => $permissions
-
+            'coach' => $this->learner->trainer->user->name,
+            'outstanding_tasks' => 0,
+            'portfolio_uploaded' => 0
         ];
     }
 }

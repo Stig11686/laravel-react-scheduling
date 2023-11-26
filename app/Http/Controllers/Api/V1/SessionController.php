@@ -11,7 +11,7 @@ use App\Models\Session;
 class SessionController extends Controller {
 
     public function index(){
-        $sessions = Session::paginate(25);
+        $sessions = Session::with('tasks')->paginate(25);
         $sessionsCollection = new SessionCollection($sessions);
 
         return response()->json([
@@ -46,6 +46,10 @@ class SessionController extends Controller {
             'review_status' => $request->input('review_status'),
             'review_due' => $request->input('review_due')
         ]);
+
+        $session->tasks()->sync($request->input('array_selected_id', []));
+
+        $session->load('tasks');
 
         return response()->json(['message' => $session->name . ' updated successfully', 'data' => new SessionResource( $session )], 200);
 

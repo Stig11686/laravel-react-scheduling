@@ -22,4 +22,8 @@ class Trainer extends Model
     function courses(){
         return $this->belongsToMany(Course::class);
     }
+
+    function learners(){
+        return $this->hasMany(Learner::class);
+    }
 }

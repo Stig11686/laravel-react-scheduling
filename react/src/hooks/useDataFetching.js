@@ -23,14 +23,23 @@ function useDataFetching(endpoint, page = 1) {
                 setPagination(response.data.pagination || null);
                 setLoading(false);
             } catch (error) {
-                setError(error);
+                const { response } = error;
+
+                if (error && response) {
+                    setError(response.data.message);
+                } else {
+                    setError(
+                        "Unknown Error - please contact your Administrator"
+                    );
+                }
+
                 setLoading(false);
             }
         }
         fetchData();
     }, [endpoint, page]);
 
-    return { data, setData, error, loading, pagination };
+    return { data, setData, error, loading, setLoading, pagination };
 }
 
 export default useDataFetching;

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 function CreateEntityModal({
     isOpen,
@@ -16,8 +17,20 @@ function CreateEntityModal({
     }, [entityData]);
 
     const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
+        const { name, options, type } = e.target;
+
+        if (type === "select-multiple") {
+            // Handle multiple selection fields
+            const selectedValues = Array.from(options)
+                .filter((option) => option.selected)
+                .map((option) => option.value);
+            setFormData({ ...formData, [name]: selectedValues });
+        } else {
+            // Handle single value fields
+            const value =
+                type === "select-one" ? e.target.value : e.target.checked;
+            setFormData({ ...formData, [name]: value });
+        }
     };
 
     const handleSubmit = (e) => {
@@ -33,15 +46,17 @@ function CreateEntityModal({
     };
 
     const renderField = (field) => {
-        //console.log(field, formData);
         if (field.type === "select" && field.options) {
-            console.log(field.name, formData[field.name]);
             return (
                 <select
                     id={field.name}
                     name={field.name}
-                    value={formData[field.name] || ""}
+                    value={
+                        formData[field.name] ||
+                        (field.multiple ? formData.selected_ids : "")
+                    }
                     onChange={handleInputChange}
+                    multiple={field.multiple}
                     className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 >
                     <option value="">{`Select ${field.label}`}</option>
@@ -109,11 +124,17 @@ function CreateEntityModal({
                             <button
                                 type="button"
                                 onClick={handleDelete}
-                                className="bg-red-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                                className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                             >
                                 Delete
                             </button>
                         )}
+                        <Link
+                            to={`./${formData.id}`}
+                            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                        >
+                            View Details
+                        </Link>
                     </div>
                 </form>
             </div>

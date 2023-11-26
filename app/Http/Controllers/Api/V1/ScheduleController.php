@@ -11,7 +11,9 @@ use App\Http\Resources\CohortSessionCollection;
 use App\Http\Resources\InstanceCollection;
 use App\Http\Resources\LearnerScheduleCollection;
 use App\Models\CohortSession;
+use App\Services\ScheduleService;
 use Illuminate\Support\Facades\Auth;
+
 
 
 class ScheduleController extends Controller
@@ -21,70 +23,22 @@ class ScheduleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    protected $scheduleService;
+
+    public function __construct(ScheduleService $scheduleService)
+    {
+        $this->scheduleService = $scheduleService;
+    }
 
 
     public function index(Request $request)
-{
+    {
+        $user = auth()->user();
+        $scheduleData = $this->scheduleService->getScheduleForUser($user);
 
-    $user = auth()->user();
-
-    //$schedule = Cohort::with(['course', 'cohortSession.trainer.user', 'cohortSession.zoom_room', 'cohortSession.session'])->get();
-    $schedule = [];
-
-
-    if ($user->hasRole('super-admin') || $user->hasRole('admin')) {
-        // For super-admins and admins, return the full schedule
-        $schedule = Cohort::with(['course', 'cohortSession.trainer.user', 'cohortSession.zoom_room', 'cohortSession.session'])->get();
-    } elseif ($user->hasRole('trainer')) {
-        $schedule = CohortSession::with(['cohort', 'trainer.user', 'cohort.course', 'zoom_room', 'session'])->where(
-            'trainer_id', $user->trainer->id
-            )
-        ->get()
-        ->groupBy('cohort_id');
-
-        $formattedSchedule = $schedule->map(function ($cohortSessions) {
-            // Assuming each group of cohortSessions contains sessions from the same cohort
-            $firstSession = $cohortSessions->first(); // Get the first session to extract common cohort data
-            return [
-                'cohort_id' => $firstSession->cohort->id,
-                'cohort_name' => $firstSession->cohort->name,
-                'course_name' => $firstSession->cohort->course->name,
-                'sessions' => $cohortSessions->map(function ($session) {
-                    return [
-                        'id' => $session->id,
-                        'session_id' => $session->session_id,
-                        'date' => $session->date,
-                        'session_name' => $session->session->name,
-                        'slides' => $session->session->slides,
-                        'trainer_notes' => $session->session->trainer_notes,
-                        // 'zoom_room' => [
-                        //     'id' => $session->zoom_room->id,
-                        //     'name' => $session->zoom_room->name,
-                        //     'link' => $session->zoom_room->link,
-                        // ],
-                        // Add more session details as needed
-                    ];
-                }),
-            ];
-        });
-
-        $formattedScheduleArray = $formattedSchedule->values()->all();
-
-
-        return response()->json(['data' => $formattedScheduleArray]);
-    } elseif ($user->hasRole('learner')) {
-        // For learners, return the schedule where they are enrolled
-        $schedule = Cohort::whereHas('learners', function ($query) use ($user) {
-            $query->where('user_id', $user->id);
-        })->with(['course', 'cohortSession.trainer.user', 'cohortSession.zoom_room', 'cohortSession.session'])->get();
-
-        return response()->json(['data' => new LearnerScheduleCollection($schedule), 'user' => $user])
-        ->header('Access-Control-Allow-Origin', 'http://localhost:3000');
+        return response()->json(['data' => $scheduleData, 'user' => $user])
+            ->header('Access-Control-Allow-Origin', 'http://localhost:3000');
     }
-
-    return response()->json(['data' => new InstanceCollection($schedule), 'user' => $user])
-        ->header('Access-Control-Allow-Origin', 'http://localhost:3000');
-}
 
 
     /**

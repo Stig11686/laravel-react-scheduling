@@ -11,7 +11,7 @@ class Task extends Model
 
     public function sessions()
     {
-        return $this->belongsToMany(Session::class);
+        return $this->belongsToMany(Session::class, 'session_task', 'task_id', 'session_id');
     }
 
     public function learners()

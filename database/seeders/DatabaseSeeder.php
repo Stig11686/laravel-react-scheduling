@@ -24,7 +24,8 @@ class DatabaseSeeder extends Seeder
                 UserSeeder::class,
                 SessionsSeeder::class,
                 TaskSeeder::class,
-                CohortSessionSeeder::class
+                CohortSessionSeeder::class,
+                SessionTaskSeeder::class
             ]);
     }
 }

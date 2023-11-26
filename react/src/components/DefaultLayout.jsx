@@ -63,12 +63,16 @@ const navigation = [
         current: false,
         roles: ["any"],
     },
+    {
+        name: "Tasks",
+        href: "/tasks",
+        icon: CalendarIcon,
+        current: false,
+        roles: ["any"],
+    },
 ];
 
-const userNavigation = [
-    { name: "Your profile", href: "#" },
-    { name: "Sign out", href: "#" },
-];
+const userNavigation = [{ name: "Your profile", href: "/profile" }];
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
@@ -85,19 +89,23 @@ function DefaultLayout() {
 
     function onLogout(e) {
         e.preventDefault();
+        setUser({});
+        setToken(null);
     }
 
     useEffect(() => {
-        axios
-            .get("/user")
-            .then(({ data }) => {
-                setUser(data.data);
-                setUserRoles(data.data.roles);
-                setUserPermissions(data.data.permissions);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+        if (!user || !user.id) {
+            axios
+                .get("/user")
+                .then(({ data }) => {
+                    setUser(data.data);
+                    setUserRoles(data.data.roles);
+                    setUserPermissions(data.data.permissions);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
     }, []);
 
     const userRoles = user && user.roles ? user.roles : [];
@@ -219,7 +227,8 @@ function DefaultLayout() {
                                                         )}
                                                     </ul>
                                                 </li>
-                                                <li className="mt-auto">
+                                                {/* TODO - Implement settings! */}
+                                                {/* <li className="mt-auto">
                                                     <a
                                                         href="#"
                                                         className="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-400 hover:bg-gray-800 hover:text-white"
@@ -230,7 +239,7 @@ function DefaultLayout() {
                                                         />
                                                         Settings
                                                     </a>
-                                                </li>
+                                                </li> */}
                                             </ul>
                                         </nav>
                                     </div>
@@ -278,7 +287,7 @@ function DefaultLayout() {
                                         ))}
                                     </ul>
                                 </li>
-                                <li className="mt-auto">
+                                {/* <li className="mt-auto">
                                     <a
                                         href="#"
                                         className="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-400 hover:bg-gray-800 hover:text-white"
@@ -289,7 +298,7 @@ function DefaultLayout() {
                                         />
                                         Settings
                                     </a>
-                                </li>
+                                </li> */}
                             </ul>
                         </nav>
                     </div>
@@ -313,31 +322,7 @@ function DefaultLayout() {
                         />
 
                         <div className="grid flex-1 gap-x-4 self-stretch lg:gap-x-6">
-                            {/* <form className="relative flex flex-1" action="#" method="GET">
-                <label htmlFor="search-field" className="sr-only">
-                  Search
-                </label>
-                <MagnifyingGlassIcon
-                  className="pointer-events-none absolute inset-y-0 left-0 h-full w-5 text-gray-400"
-                  aria-hidden="true"
-                />
-                <input
-                  id="search-field"
-                  className="block h-full w-full border-0 py-0 pl-8 pr-0 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm"
-                  placeholder="Search..."
-                  type="search"
-                  name="search"
-                />
-              </form> */}
                             <div className="flex items-center justify-self-end gap-x-4 lg:gap-x-6">
-                                {/* <button
-                  type="button"
-                  className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500"
-                >
-                  <span className="sr-only">View notifications</span>
-                  <BellIcon className="h-6 w-6" aria-hidden="true" />
-                </button> */}
-
                                 {/* Separator */}
                                 <div
                                     className="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-900/10"
@@ -399,6 +384,21 @@ function DefaultLayout() {
                                                     )}
                                                 </Menu.Item>
                                             ))}
+                                            <Menu.Item>
+                                                {({ active }) => (
+                                                    <a
+                                                        href="#"
+                                                        className={classNames(
+                                                            active
+                                                                ? "bg-gray-50"
+                                                                : "",
+                                                            "block px-3 py-1 text-sm leading-6 text-gray-900"
+                                                        )}
+                                                    >
+                                                        Sign Out
+                                                    </a>
+                                                )}
+                                            </Menu.Item>
                                         </Menu.Items>
                                     </Transition>
                                 </Menu>

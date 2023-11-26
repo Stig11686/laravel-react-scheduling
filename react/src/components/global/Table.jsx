@@ -1,3 +1,5 @@
+import { useStateContext } from "../../contexts/ContextProvider";
+
 function generateColumns(data) {
     const dataArray = Array.isArray(data) ? data : [data];
 
@@ -79,6 +81,8 @@ function formatHeadings(inputString) {
 }
 
 function Table({ data, onRowClick }) {
+    const { user } = useStateContext();
+
     if (!data || data.length === 0) {
         return <p>No data available</p>;
     }
@@ -109,7 +113,7 @@ function Table({ data, onRowClick }) {
                 <tbody className="bg-white divide-y divide-gray-200">
                     {data.map((item) => (
                         <tr
-                            className="cursor-pointer"
+                            className={"cursor-pointer"}
                             key={item.id}
                             onClick={() => handleRowClick(item)}
                         >

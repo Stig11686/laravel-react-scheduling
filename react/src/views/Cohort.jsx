@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import EditForm from "../components/global/EditForm";
+import Table from "../components/global/Table";
 import Loader from "../components/global/Loader";
 import axios from "../../axios";
 
@@ -31,20 +31,26 @@ function Cohort() {
         },
         [id]
     );
+
     return (
         <div>
             {error && <p>{error}</p>}
             {isLoading && <Loader />}
             {courseData && (
-                <div>
-                    <h2 className="text-base font-semibold leading-7 text-gray-900">
-                        Edit {courseData.name}
-                    </h2>
-                    <EditForm
-                        course={courseData}
-                        handleChange={setCourseData}
-                    />
-                </div>
+                <>
+                    <div>
+                        <h2 className="text-base font-semibold leading-7 text-gray-900">
+                            {courseData.name} Details
+                        </h2>
+                    </div>
+                    <div>
+                        <h3>Details</h3>
+                    </div>
+                    <div>
+                        <h3>Learners</h3>
+                        <Table data={courseData.learners} />
+                    </div>
+                </>
             )}
         </div>
     );

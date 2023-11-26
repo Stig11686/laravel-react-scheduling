@@ -15,7 +15,7 @@ class CohortResource extends JsonResource
      */
     public function toArray($request)
     {
-        $learnerUsers = UserResource::collection(
+        $learnerUsers = LearnerResource::collection(
             User::whereIn('id', collect($this->learners)->pluck('user_id'))->get()
         );
 

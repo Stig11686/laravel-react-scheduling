@@ -1,9 +1,6 @@
 import DataFetchingComponent from "../components/global/DataFetchingComponent";
-import useDataFetching from "../hooks/useDataFetching";
 
-function Sessions() {
-    const { data } = useDataFetching("/tasks");
-
+function Tasks() {
     const fields = [
         {
             name: "name",
@@ -11,9 +8,9 @@ function Sessions() {
             label: "Name",
         },
         {
-            name: "review_due",
-            type: "date",
-            label: "Review Due",
+            name: "description",
+            type: "text",
+            label: "Task Description",
         },
         {
             name: "review_status",
@@ -40,25 +37,14 @@ function Sessions() {
             type: "text",
             label: "Trainer Notes",
         },
-        {
-            name: "array_selected_id",
-            type: "select",
-            label: "Press Ctrl + Click to Add/Remove tasks!",
-            multiple: true,
-            options: data.map((task) => ({
-                value: task.id,
-                label: task.name,
-                //     selected: selectedIds.includes(task.id),
-            })),
-        },
     ];
     return (
         <DataFetchingComponent
-            endpoint="/sessions"
-            title="Sessions"
+            endpoint="/tasks"
+            title="Tasks"
             createEntityFields={fields}
         />
     );
 }
 
-export default Sessions;
+export default Tasks;

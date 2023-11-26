@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\V1\ScheduleController;
 use App\Http\Controllers\Api\V1\TrainerController;
 use App\Http\Controllers\Api\V1\UserController;
 use App\Http\Controllers\Api\V1\ZoomRoomController;
+use App\Http\Controllers\Api\V1\TaskController;
 use App\Http\Resources\UserResource;
 
 /*
@@ -34,19 +35,25 @@ Route::post('/login', [AuthController::class, 'login'])->name('login');
 
 Route::middleware('auth:sanctum')->group(function(){
     Route::get('/user', function (Request $request) {
-        $user = $request->user();
+        $user = Auth::user();
         $user->load('roles', 'permissions'); // Eager load roles and permissions
 
-        return new UserResource( $user );
+        return response()->json(['data' => new UserResource( $user )]);
     });
 
     Route::post('/logout', [AuthController::class, 'logout']);
-    Route::resource('/courses', CourseController::class);
-    Route::resource('/cohorts', CohortController::class);
-    Route::resource('/sessions', SessionController::class);
     Route::resource('/schedule', ScheduleController::class);
-    Route::resource('/trainers', TrainerController::class);
-    Route::resource('/zoom_rooms', ZoomRoomController::class);
-    Route::resource('/cohort_session', CohortSessionController::class);
-    Route::resource('/users', UserController::class);
+
+    Route::middleware(['can:view_admin_area'])->group(function(){
+        Route::resource('/courses', CourseController::class);
+        Route::resource('/cohorts', CohortController::class);
+        Route::resource('/sessions', SessionController::class);
+        Route::resource('/tasks', TaskController::class);
+        Route::resource('/trainers', TrainerController::class);
+        Route::resource('/zoom_rooms', ZoomRoomController::class);
+        Route::resource('/cohort_session', CohortSessionController::class);
+        Route::resource('/users', UserController::class);
+    });
+
+
 });
