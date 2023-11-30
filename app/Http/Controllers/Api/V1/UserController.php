@@ -11,6 +11,7 @@ use App\Models\Cohort;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Inertia\Inertia;
+use App\Http\Resources\UserResource;
 
 class UserController extends Controller
 {
@@ -24,7 +25,7 @@ class UserController extends Controller
     {
         $users = User::with('roles', 'permissions')->where('id', '<>', auth()->user()->id)->paginate(50);
 
-        return response()->json(['data' => new UserCollection($users)]);
+        return response()->json(['data' => UserResource::collection($users)]);
     }
 
     /**

@@ -9,10 +9,13 @@ import Cohort from "./views/Cohort";
 import Sessions from "./views/Sessions";
 import Session from "./views/Session";
 import Schedule from "./views/Schedule";
+import CohortSchedule from "./views/CohortSchedule";
 import Dashboard from "./views/Dashboard";
 import NotFound from "./views/404";
 import Tasks from "./views/Tasks";
 import Task from "./views/Task";
+import Users from "./views/Users";
+import User from "./views/User";
 
 const router = createBrowserRouter([
     {
@@ -56,12 +59,24 @@ const router = createBrowserRouter([
                 element: <Sessions />,
             },
             {
-                path: "/sessions:id",
+                path: "/sessions/:id",
                 element: <Session />,
             },
             {
                 path: "/schedule",
                 element: <Schedule />,
+            },
+            {
+                path: "/schedule/:id",
+                element: <CohortSchedule />,
+            },
+            {
+                path: "/users",
+                element: <Users />,
+            },
+            {
+                path: "/users/:id",
+                element: <User />,
             },
         ],
     },

@@ -42,7 +42,7 @@ class CohortController extends Controller {
 
         $cohort->save();
 
-        return response()->json(['data' => new CohortResource($cohort), 'message' => 'Cohort successfully created']);
+        return response()->json(['data' => new CohortResource($cohort), 'message' => 'Cohort successfully created', 'api_test' => 'changed received from github action!']);
     }
 
     public function update(CohortRequest $request){

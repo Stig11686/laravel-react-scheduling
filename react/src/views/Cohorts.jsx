@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-import { useState } from "react";
 import DataFetchingComponent from "../components/global/DataFetchingComponent";
 import useDataFetching from "../hooks/useDataFetching";
 
