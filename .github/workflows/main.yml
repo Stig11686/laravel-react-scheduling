@@ -11,6 +11,7 @@ jobs:
     - name: 📂 Sync files
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:
-        server: ftp.samkirkland.com
-        username: myFtpUserName
+        server: ftp.bvswebdesign.co.uk
+        username: ${{ secrets.ftp_username}}
         password: ${{ secrets.ftp_password }}
+        server_dir: /schedulingapi.bvswebdesign.co.uk/
