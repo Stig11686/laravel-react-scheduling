@@ -16,6 +16,7 @@ class CohortController extends Controller {
 
         return response()->json([
             'data' => $cohortCollection,
+            'api_test' => 'changed received from github action!',
             'pagination' => [
                 'total' => $cohorts->total(),
                 'per_page' => $cohorts->perPage(),
