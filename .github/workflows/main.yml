@@ -14,4 +14,4 @@ jobs:
         server: ftp.bvswebdesign.co.uk
         username: ${{ secrets.ftp_username}}
         password: ${{ secrets.ftp_password }}
-        server_dir: /schedulingapi.bvswebdesign.co.uk/
+        server-dir: /schedulingapi.bvswebdesign.co.uk/
