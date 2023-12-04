@@ -54,4 +54,20 @@ class User extends Authenticatable
         return $this->hasOne(Learner::class);
     }
 
+    public function employer()
+    {
+        return $this->belongsTo(Employer::class);
+    }
+
+    public function managedBy()
+    {
+        return $this->belongsTo(User::class, 'manager_id', 'id');
+    }
+
+    public function mentoredBy()
+    {
+        return $this->belongsTo(User::class, 'mentor_id', 'id');
+    }
+
+
 }

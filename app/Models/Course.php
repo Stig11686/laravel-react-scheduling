@@ -40,4 +40,8 @@ class Course extends Model
         return $this->hasManyThrough(Learner::class, Cohort::class);
     }
 
+    public function course_type(){
+        return $this->belongsTo(CourseType::class);
+    }
+
 }

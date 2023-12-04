@@ -2,13 +2,13 @@
 
 namespace Database\Seeders;
 
-use App\Models\Cohort;
-use App\Models\Learner;
-use App\Models\Trainer;
-use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
-use Spatie\Permission\Models\Role;
+use App\Models\User;
+use App\Models\Employer;
+use App\Models\Learner;
+use App\Models\Cohort;
+use App\Models\Trainer;
 
 class UserSeeder extends Seeder
 {
@@ -39,14 +39,15 @@ class UserSeeder extends Seeder
             'user_id' => $trainer->id
         ]);
 
-        $trainer = User::create([
+        // Create a sample learner with associated cohort and trainer
+        $learner = User::create([
             'name' => 'learner',
             'email' => 'steven.marks@bvswebdesign.co.uk',
             'password' => bcrypt('Erding3r!')
         ])->assignRole('learner');
 
         Learner::create([
-            'user_id' => $trainer->id,
+            'user_id' => $learner->id,
             'cohort_id' => 1,
             'trainer_id' => 1
         ]);
@@ -55,35 +56,52 @@ class UserSeeder extends Seeder
         $cohort_one->decrement('places');
 
         // Create learners and assign to cohorts
-        $cohorts = Cohort::all();
         $users = User::factory(200)->create([
             'password' => Hash::make('password')
         ]);
 
-        // Create trainer users
-        $trainerUsers = $users->take(20);
-        foreach ($trainerUsers as $user) {
-            Trainer::create([
-                'user_id' => $user->id,
-                'has_dbs' => 1
-            ]);
-            $user->assignRole('trainer');
-        }
+        // Assign roles to users
+        $this->assignRoles($users);
 
-        $learnerUsers = $users->skip(20)->take(180);
-        foreach ($learnerUsers as $user) {
-            // Create a learner entry
+        // Assign employers, managers, and mentors for learners
+        $this->assignEmployersForLearners($users);
+    }
+
+    private function assignRoles($users)
+    {
+        $rolesCount = [
+            'learner' => 0.7 * count($users),
+            'trainer' => 0.15 * count($users),
+            'manager' => 0.1 * count($users),
+            'mentor' => 0.05 * count($users),
+        ];
+
+        foreach ($rolesCount as $role => $count) {
+            $roleUsers = $users->splice(0, $count);
+            foreach ($roleUsers as $user) {
+                $user->assignRole($role);
+            }
+        }
+    }
+
+    private function assignEmployersForLearners($users)
+    {
+        $cohorts = Cohort::all();
+        foreach ($users->where('hasRole', 'learner') as $user) {
             $cohort = $cohorts->where('places', '>', 0)->random();
             $learner = Learner::create([
                 'user_id' => $user->id,
                 'cohort_id' => $cohort->id,
-                'trainer_id' => 2
+                'trainer_id' => 2 // Update with the appropriate trainer ID
             ]);
 
             $cohort->decrement('places');
-            $user->assignRole('learner');
+
+            if ($cohort->course->course_type->name === 'Apprenticeship') {
+                $employer = Employer::inRandomOrder()->first();
+                $user->learner->employer_id = $employer->id;
+                $user->learner->save();
+            }
         }
     }
 }
-
-

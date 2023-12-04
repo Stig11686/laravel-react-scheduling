@@ -16,11 +16,13 @@ class DatabaseSeeder extends Seeder
 
 
             $this->call([
+                CourseTypeSeeder::class,
                 ZoomRoomsSeeder::class,
                 FundersSeeder::class,
                 CourseSeeder::class,
                 CohortSeeder::class,
                 RolesPermissionsSeeder::class,
+                EmployerSeeder::class,
                 UserSeeder::class,
                 SessionsSeeder::class,
                 TaskSeeder::class,

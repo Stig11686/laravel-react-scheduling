@@ -25,4 +25,8 @@ class Learner extends Model
     public function trainer(){
         return $this->belongsTo(Trainer::class);
     }
+
+    public function employer(){
+        return $this->belongsTo(Employer::class);
+    }
 }

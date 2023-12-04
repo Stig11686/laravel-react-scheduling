@@ -1,0 +1,16 @@
+[90m= [39m[34;4mApp\Models\User[39;24m {#7526
+    [34mid[39m: [35m4[39m,
+    [34mname[39m: "[32mlearner[39m",
+    [34memail[39m: "[32msteven.marks@bvswebdesign.co.uk[39m",
+    [34memail_verified_at[39m: [36mnull[39m,
+    #[33mpassword[39m: "[32m$2y$10$2cXfbUBMzc080AVjyjfoBOVYRWH6ayBD2JjVJE16LExbXtM3Ax08.[39m",
+    #[33mremember_token[39m: [36mnull[39m,
+    [34mcreated_at[39m: "[32m2023-12-03 15:07:03[39m",
+    [34mupdated_at[39m: "[32m2023-12-03 15:07:03[39m",
+    [34mpivot[39m: [34;4mIlluminate\Database\Eloquent\Relations\MorphPivot[39;24m {#7524
+      [34mmodel_type[39m: "[32mApp\Models\User[39m",
+      [34mrole_id[39m: [35m4[39m,
+      [34mmodel_id[39m: [35m4[39m,
+    },
+  }
+

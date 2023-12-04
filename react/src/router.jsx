@@ -4,6 +4,8 @@ import GuestLayout from "./components/GuestLayout";
 import Login from "./views/Login";
 import Courses from "./views/Courses";
 import Course from "./views/Course";
+import Employers from "./views/Employers";
+import Employer from "./views/Employer";
 import Cohorts from "./views/Cohorts";
 import Cohort from "./views/Cohort";
 import Sessions from "./views/Sessions";
@@ -77,6 +79,14 @@ const router = createBrowserRouter([
             {
                 path: "/users/:id",
                 element: <User />,
+            },
+            {
+                path: "/employers",
+                element: <Employers />,
+            },
+            {
+                path: "/employers/:id",
+                element: <Employer />,
             },
         ],
     },

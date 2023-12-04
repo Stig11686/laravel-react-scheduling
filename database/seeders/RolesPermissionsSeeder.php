@@ -86,6 +86,14 @@ class RolesPermissionsSeeder extends Seeder
             'name' => 'learner'
         ]);
 
+        $manager = Role::create([
+            'name' => 'manager'
+        ]);
+
+        $mentor = Role::create([
+            'name' => 'mentor'
+        ]);
+
         //assign permissions to roles
         $super_admin->givePermissionTo(Permission::all());
         $admin->givePermissionTo(Permission::all());

@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\V1\CourseController;
 use App\Http\Controllers\Api\V1\CohortController;
+use App\Http\Controllers\Api\V1\EmployerController;
 use App\Http\Controllers\Api\V1\CohortSessionController;
 use App\Http\Controllers\Api\V1\SessionController;
 use App\Http\Controllers\Api\V1\ScheduleController;
@@ -48,6 +49,7 @@ Route::middleware('auth:sanctum')->group(function(){
         Route::resource('/courses', CourseController::class);
         Route::resource('/cohorts', CohortController::class);
         Route::resource('/sessions', SessionController::class);
+        Route::resource('/employers', EmployerController::class);
         Route::resource('/tasks', TaskController::class);
         Route::resource('/trainers', TrainerController::class);
         Route::resource('/zoom_rooms', ZoomRoomController::class);

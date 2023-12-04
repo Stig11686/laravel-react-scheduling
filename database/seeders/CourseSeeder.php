@@ -16,13 +16,15 @@ class CourseSeeder extends Seeder
     public function run()
     {
         $courses =[
-            ['name' => 'Crucial Skills for Software Developers'],
-            ['name' => 'Crucial Skills for Software Testers'],
-            ['name' => 'Essential Skills for Digital Project Managers'],
-            ['name' => 'Essential Skills for Agile in Tech'],
-            ['name' => 'Essential Skill for UX Professionals'],
-            ['name' => 'Level 4 Software Development Apprenticeship'],
-            ['name' => 'Level 4 Software Testing Apprenticeship'],
+            ['name' => 'Crucial Skills for Software Developers', 'course_type_id' => 2],
+            ['name' => 'Crucial Skills for Software Testers', 'course_type_id' => 2],
+            ['name' => 'Essential Skills for Digital Project Managers', 'course_type_id' => 2],
+            ['name' => 'Essential Skills for Agile in Tech', 'course_type_id' => 2],
+            ['name' => 'Essential Skill for UX Professionals', 'course_type_id' => 2],
+            ['name' => 'Level 4 Software Development Apprenticeship', 'course_type_id' => 1],
+            ['name' => 'Level 4 Software Testing Apprenticeship', 'course_type_id' => 1],
+            ['name' => 'Level 4 DevOps Apprenticeship', 'course_type_id' => 1],
+            ['name' => 'Level 4 Accessibility Apprenticeship', 'course_type_id' => 1],
         ];
 
         foreach($courses as $course){

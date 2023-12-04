@@ -20,7 +20,10 @@ class LearnerResource extends JsonResource
             'email' => $this->email,
             'coach' => $this->learner->trainer->user->name,
             'outstanding_tasks' => 0,
-            'portfolio_uploaded' => 0
+            'portfolio_uploaded' => 0,
+            'employer' => $this->when($this->learner->employer, function () {
+                return $this->learner->employer->name;
+            }),
         ];
     }
 }
