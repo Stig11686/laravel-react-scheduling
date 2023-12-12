@@ -52,11 +52,4 @@ class UserFactory extends Factory
         $string = str_replace(' ', '-', $string);
         return trim($string);
     }
-
-    public function configure()
-    {
-        return $this->afterCreating(function (User $user) {
-            $user->assignRole('learner');
-        });
-    }
 }

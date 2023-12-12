@@ -13,8 +13,6 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->foreignId('employer_id')->nullable()->constrained('employers');
-            $table->foreignId('manager_id')->nullable()->constrained('users');
-            $table->foreignId('mentor_id')->nullable()->constrained('users');
         });
     }
 

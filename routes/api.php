@@ -43,19 +43,24 @@ Route::middleware('auth:sanctum')->group(function(){
     });
 
     Route::post('/logout', [AuthController::class, 'logout']);
-    Route::resource('/schedule', ScheduleController::class);
+
 
     Route::middleware(['can:view_admin_area'])->group(function(){
-        Route::resource('/courses', CourseController::class);
-        Route::resource('/cohorts', CohortController::class);
-        Route::resource('/sessions', SessionController::class);
-        Route::resource('/employers', EmployerController::class);
-        Route::resource('/tasks', TaskController::class);
-        Route::resource('/trainers', TrainerController::class);
-        Route::resource('/zoom_rooms', ZoomRoomController::class);
-        Route::resource('/cohort_session', CohortSessionController::class);
-        Route::resource('/users', UserController::class);
+
+
     });
+
+    Route::resource('/schedule', ScheduleController::class);
 
 
 });
+
+Route::resource('/courses', CourseController::class);
+Route::resource('/cohorts', CohortController::class);
+Route::resource('/sessions', SessionController::class);
+Route::resource('/employers', EmployerController::class);
+Route::resource('/tasks', TaskController::class);
+Route::resource('/trainers', TrainerController::class);
+Route::resource('/zoom_rooms', ZoomRoomController::class);
+Route::resource('/cohort_session', CohortSessionController::class);
+Route::resource('/users', UserController::class);

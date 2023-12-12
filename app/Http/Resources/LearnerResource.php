@@ -14,16 +14,20 @@ class LearnerResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+
         return [
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
-            'coach' => $this->learner->trainer->user->name,
             'outstanding_tasks' => 0,
-            'portfolio_uploaded' => 0,
-            'employer' => $this->when($this->learner->employer, function () {
-                return $this->learner->employer->name;
-            }),
+            $this->mergeWhen($this->learner->cohort->course->course_type->name === 'Apprenticeship',
+                 [
+                    'coach' => $this->learner->trainer->user->name,
+                    'portfolio_uploaded' => 0,
+                    'employer' => $this->learner->employer ? $this->learner->employer->name : null,
+                    'manager' => $this->learner->manager ? $this->learner->manager->name : null,
+                ]
+            ),
         ];
     }
 }

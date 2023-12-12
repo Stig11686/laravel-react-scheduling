@@ -27,6 +27,11 @@ class Learner extends Model
     }
 
     public function employer(){
-        return $this->belongsTo(Employer::class);
+        return $this->user->belongsTo(Employer::class, 'employer_id');
+    }
+
+    public function manager()
+    {
+        return $this->belongsTo(User::class, 'manager_id');
     }
 }

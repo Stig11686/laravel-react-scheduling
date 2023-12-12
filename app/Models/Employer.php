@@ -15,11 +15,17 @@ class Employer extends Model
 
     public function managers()
     {
-        return $this->hasMany(User::class, 'manager_id', 'id');
+        return $this->hasMany(User::class)
+            ->whereHas('roles', function ($query) {
+                $query->where('name', 'manager');
+            });
     }
 
     public function mentors()
     {
-        return $this->hasMany(User::class, 'mentor_id', 'id');
+        return $this->hasMany(User::class)
+            ->whereHas('roles', function ($query) {
+                $query->where('name', 'mentor');
+            });
     }
 }

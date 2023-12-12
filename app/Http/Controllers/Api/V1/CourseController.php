@@ -11,7 +11,9 @@ use App\Http\Resources\CourseResource;
 class CourseController extends Controller {
 
     public function index(){
-        return response()->json(['data' => new CourseCollection( Course::all() )]);
+        $courses = Course::all();
+        \Debugbar::info('API endpoint: /api/courses');
+        return response()->json(['data' => new CourseCollection( $courses )]);
     }
 
     public function show(Course $course){

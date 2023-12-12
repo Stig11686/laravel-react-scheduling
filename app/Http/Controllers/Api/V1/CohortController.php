@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CohortRequest;
 use App\Http\Resources\CohortCollection;
 use App\Http\Resources\CohortResource;
+use App\Http\Resources\CohortWithLearnerResource;
 use App\Models\Cohort;
 
 class CohortController extends Controller {
@@ -16,7 +17,6 @@ class CohortController extends Controller {
 
         return response()->json([
             'data' => $cohortCollection,
-            'api_test' => 'changed received from github action!',
             'pagination' => [
                 'total' => $cohorts->total(),
                 'per_page' => $cohorts->perPage(),
@@ -29,7 +29,7 @@ class CohortController extends Controller {
     }
 
     public function show(Cohort $cohort){
-        return response()->json(['data' => new CohortResource( $cohort )])
+        return response()->json(['data' => new CohortWithLearnerResource( $cohort )])
         ->header('Access-Control-Allow-Origin', 'http://localhost:3000');
     }
 

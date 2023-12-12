@@ -3,7 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Http\Resources\UserResource;
+use App\Http\Resources\LearnerCourseResource;
 use App\Models\User;
 
 class CourseResource extends JsonResource
@@ -16,14 +16,18 @@ class CourseResource extends JsonResource
      */
     public function toArray($request)
     {
-        $learnerUsers = UserResource::collection(
-            User::whereIn('id', collect($this->learners)->pluck('user_id'))->get()
-        );
+        //Originally I loaded all the users with the course - however, I feel I don't need to do that
+        //any more. I have left this code here in case I need to reintroduce it!
+
+        //TODO - REMOVE THIS WHEN I KNOW I DON'T NEED IT
+        // $learnerUsers = LearnerCourseResource::collection(
+        //     User::whereIn('id', collect($this->learners)->pluck('user_id'))->get()
+        // );
 
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'learners' => $learnerUsers// Assuming 'name' is the column in the users table you want to retrieve
+            'learners' => $this->learners->count()
         ];
     }
 }

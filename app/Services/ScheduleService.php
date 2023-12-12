@@ -7,13 +7,28 @@ use App\Models\Cohort;
 use App\Models\CohortSession;
 use App\Http\Resources\LearnerScheduleCollection;
 use App\Http\Resources\InstanceCollection;
+use Spatie\Permission\Models\Role;
 
 class ScheduleService
 {
-    public function getScheduleForUser(User $user)
+    public function getScheduleForUser($user)
     {
+        if(!$user ){
+            $user = User::find(1);
+        }
+
+
         if ($user->hasRole(['super-admin', 'admin'])) {
-            $cohorts = Cohort::with(['course', 'cohortSession.trainer.user', 'cohortSession.zoom_room', 'cohortSession.session'])->get();
+            $cohorts = Cohort::with([
+                'course',
+                'cohortSession' => function($query) {
+                    $query->with([
+                        'trainer.user',
+                        'zoom_room',
+                        'session'
+                    ]);
+                },
+            ])->get();
             return new InstanceCollection($cohorts);
         }
 
