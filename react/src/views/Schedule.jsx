@@ -10,21 +10,28 @@ import axios from "../../axios";
 import { useStateContext } from "../contexts/ContextProvider";
 
 function Schedule() {
+    const [page, setPage] = useState(1);
     const { user } = useStateContext();
 
     const { data, error, loading, pagination, setData } = useDataFetching(
         "/schedule",
-        1,
+        page,
         user.id
     );
-    const { data: sessions } = useDataFetching("/sessions");
-    const { data: trainers } = useDataFetching("/trainers");
+    const { data: sessions } = useDataFetching("/sessionsAll");
+    const { data: trainers } = useDataFetching("/trainersAll");
     const { data: zoom_rooms } = useDataFetching("/zoom_rooms");
-    const { data: cohorts } = useDataFetching("/cohorts");
+    const { data: cohorts } = useDataFetching("/cohortsAll");
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [modalMode, setModalMode] = useState("create"); // Default to create mode
+    const [modalMode, setModalMode] = useState("create");
     const [modalData, setModalData] = useState(null);
     const [message, setMessage] = useState(null);
+   
+
+    const handlePageChange = (newPage) => {
+        setPage(newPage);
+    };
+
 
     const openModal = (mode, data = null) => {
         setIsModalOpen(true);
@@ -148,7 +155,7 @@ function Schedule() {
             type: "select",
             options: trainers.map((trainer) => ({
                 label: trainer.name,
-                value: trainer.id,
+                value: trainer.trainer_id,
             })),
             label: "Trainer",
         },
@@ -174,7 +181,9 @@ function Schedule() {
                     />
                 </ScheduleAccordion>
             ))}
-            {pagination && <PaginationComponent />}
+            {pagination && <PaginationComponent onPageChange={handlePageChange}
+                    currentPage={pagination.current_page}
+                    lastPage={pagination.last_page} />}
 
             <CreateEntityModal
                 isOpen={isModalOpen}

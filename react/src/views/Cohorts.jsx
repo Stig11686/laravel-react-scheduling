@@ -2,7 +2,7 @@ import DataFetchingComponent from "../components/global/DataFetchingComponent";
 import useDataFetching from "../hooks/useDataFetching";
 
 function Cohorts() {
-    const { data } = useDataFetching("/courses");
+    const { data } = useDataFetching("/coursesAll");
     const fields = [
         {
             name: "name",

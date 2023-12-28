@@ -50,4 +50,5 @@ class ZoomRoomController extends Controller {
         return response()->json(['message' => 'Cohort deleted successfully', 'data' => new CohortCollection( Cohort::paginate(10))]);
 
     }
+
 }

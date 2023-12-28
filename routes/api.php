@@ -46,8 +46,19 @@ Route::middleware('auth:sanctum')->group(function(){
 
 
     Route::middleware(['can:view_admin_area'])->group(function(){
-
-
+        Route::resource('/courses', CourseController::class);
+        Route::resource('/cohorts', CohortController::class);
+        Route::resource('/sessions', SessionController::class);
+        Route::resource('/employers', EmployerController::class);
+        Route::resource('/tasks', TaskController::class);
+        Route::resource('/trainers', TrainerController::class);
+        Route::resource('/zoom_rooms', ZoomRoomController::class);
+        Route::resource('/cohort_session', CohortSessionController::class);
+        Route::resource('/users', UserController::class);
+        Route::get('/sessionsAll', [SessionController::class, 'allSessions']);
+        Route::get('/trainersAll', [TrainerController::class, 'allTrainers']);
+        Route::get('/cohortsAll', [CohortController::class, 'allCohorts']);
+        Route::get('/coursesAll', [CourseController::class, 'allCourses']);
     });
 
     Route::resource('/schedule', ScheduleController::class);
@@ -55,12 +66,5 @@ Route::middleware('auth:sanctum')->group(function(){
 
 });
 
-Route::resource('/courses', CourseController::class);
-Route::resource('/cohorts', CohortController::class);
-Route::resource('/sessions', SessionController::class);
-Route::resource('/employers', EmployerController::class);
-Route::resource('/tasks', TaskController::class);
-Route::resource('/trainers', TrainerController::class);
-Route::resource('/zoom_rooms', ZoomRoomController::class);
-Route::resource('/cohort_session', CohortSessionController::class);
-Route::resource('/users', UserController::class);
+
+

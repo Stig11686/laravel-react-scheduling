@@ -36,7 +36,7 @@ class ScheduleController extends Controller
         $user = auth()->user();
         $scheduleData = $this->scheduleService->getScheduleForUser($user);
 
-        return response()->json(['data' => $scheduleData, 'user' => $user])
+        return response()->json($scheduleData)
             ->header('Access-Control-Allow-Origin', 'http://localhost:3000');
     }
 

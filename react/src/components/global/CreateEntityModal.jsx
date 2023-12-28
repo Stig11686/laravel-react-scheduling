@@ -95,6 +95,8 @@ function CreateEntityModal({
         return null;
     }
 
+    console.log(formData);
+
     return (
         <div className="fixed inset-0 flex items-center justify-center z-50">
             <div className="modal-overlay fixed inset-0 bg-black opacity-50"></div>

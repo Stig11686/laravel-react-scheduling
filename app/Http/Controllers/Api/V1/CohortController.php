@@ -8,22 +8,38 @@ use App\Http\Resources\CohortCollection;
 use App\Http\Resources\CohortResource;
 use App\Http\Resources\CohortWithLearnerResource;
 use App\Models\Cohort;
+use App\Models\Learner;
 
 class CohortController extends Controller {
 
     public function index(){
-        $cohorts = Cohort::paginate(10);
+        // Retrieve cohorts with the course relationship
+        $cohorts = Cohort::with('course')->paginate(10);
+    
+        // Retrieve the learner count separately for each cohort
+        $cohortIds = $cohorts->pluck('id')->toArray();
+        $learnerCounts = Learner::whereIn('cohort_id', $cohortIds)
+                        ->selectRaw('cohort_id, count(*) as learner_count')
+                        ->groupBy('cohort_id')
+                        ->get()
+                        ->keyBy('cohort_id');
+    
+        // Merge learner count with each cohort
+        $cohorts->each(function ($cohort) use ($learnerCounts) {
+            $cohort->learner_count = $learnerCounts[$cohort->id]->learner_count ?? 0;
+        });
+    
         $cohortCollection = new CohortCollection($cohorts);
-
+    
         return response()->json([
             'data' => $cohortCollection,
             'pagination' => [
-                'total' => $cohorts->total(),
-                'per_page' => $cohorts->perPage(),
-                'current_page' => $cohorts->currentPage(),
-                'last_page' => $cohorts->lastPage(),
-                'from' => $cohorts->firstItem(),
-                'to' => $cohorts->lastItem()
+                'total' => $cohortCollection->total(),
+                'per_page' => $cohortCollection->perPage(),
+                'current_page' => $cohortCollection->currentPage(),
+                'last_page' => $cohortCollection->lastPage(),
+                'from' => $cohortCollection->firstItem(),
+                'to' => $cohortCollection->lastItem()
             ]
         ])->header('Access-Control-Allow-Origin', 'http://localhost:3000');
     }
@@ -78,5 +94,11 @@ class CohortController extends Controller {
 
         return response()->json(['message' => 'Cohort deleted successfully', 'data' => new CohortCollection( Cohort::paginate(10))]);
 
+    }
+
+    public function allCohorts(){
+        $cohorts = Cohort::select('id', 'name')->get();
+
+        return response()->json([ 'data' => $cohorts ]);
     }
 }

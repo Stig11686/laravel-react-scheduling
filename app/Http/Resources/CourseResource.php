@@ -27,7 +27,7 @@ class CourseResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'learners' => $this->learners->count()
+            'learners' => $this->learner_count
         ];
     }
 }

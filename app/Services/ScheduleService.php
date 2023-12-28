@@ -28,8 +28,19 @@ class ScheduleService
                         'session'
                     ]);
                 },
-            ])->get();
-            return new InstanceCollection($cohorts);
+            ])->paginate(15);
+
+            return [
+                'data' => new InstanceCollection($cohorts), 
+                'pagination' => [
+                'total' => $cohorts->total(),
+                'per_page' => $cohorts->perPage(),
+                'current_page' => $cohorts->currentPage(),
+                'last_page' => $cohorts->lastPage(),
+                'from' => $cohorts->firstItem(),
+                'to' => $cohorts->lastItem()
+                ]
+                ];
         }
 
         if ($user->hasRole('trainer')) {

@@ -19,6 +19,7 @@ class InstanceResource extends JsonResource
             'course_name' => $this->course->name,
             'cohort_name' => $this->name,
             'sessions' => CohortSessionResource::collection($this->cohortSession),
+
         ];
 
     }

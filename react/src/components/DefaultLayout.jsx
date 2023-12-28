@@ -1,4 +1,4 @@
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet, Link } from "react-router-dom";
 import { useStateContext } from "../contexts/ContextProvider";
 import { Fragment, useState, useEffect } from "react";
 import axios from "../../axios";
@@ -203,8 +203,8 @@ function DefaultLayout() {
                                                                         item.name
                                                                     }
                                                                 >
-                                                                    <a
-                                                                        href={
+                                                                    <Link
+                                                                        to={
                                                                             item.href
                                                                         }
                                                                         className={classNames(
@@ -221,7 +221,7 @@ function DefaultLayout() {
                                                                         {
                                                                             item.name
                                                                         }
-                                                                    </a>
+                                                                    </Link>
                                                                 </li>
                                                             )
                                                         )}
@@ -268,8 +268,8 @@ function DefaultLayout() {
                                     <ul role="list" className="-mx-2 space-y-1">
                                         {filteredNavigation.map((item) => (
                                             <li key={item.name}>
-                                                <a
-                                                    href={item.href}
+                                                <Link
+                                                    to={item.href}
                                                     className={classNames(
                                                         item.current
                                                             ? "bg-gray-800 text-white"
@@ -282,7 +282,7 @@ function DefaultLayout() {
                                                         aria-hidden="true"
                                                     />
                                                     {item.name}
-                                                </a>
+                                                </Link>
                                             </li>
                                         ))}
                                     </ul>

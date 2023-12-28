@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Models\Trainer;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Resources\TrainerCollection;
 use App\Http\Controllers\Controller;
+
 
 class TrainerController extends Controller
 {
@@ -140,5 +142,13 @@ class TrainerController extends Controller
         $trainer->delete();
 
         return redirect()->route('trainers');
+    }
+
+    public function allTrainers() {
+        $trainers = Trainer::join('users', 'trainers.user_id', '=', 'users.id')
+                        ->select('trainers.id as trainer_id', 'users.name')
+                        ->get();
+    
+        return response()->json(['data' => $trainers]);
     }
 }

@@ -23,8 +23,6 @@ class CohortSessionResource extends JsonResource
             'slides' => $this->session->slides,
             'session_id' => $this->session->id,
             'cohort_id' => $this->cohort_id,
-            'cohort_name' => $this->cohort->name,
-            'course_name' => $this->cohort->course->name,
             'zoom_room' => $this->zoom_room ? $this->zoom_room->link : null,
             'zoom_room_id' => $this->zoom_room ? $this->zoom_room->id : null,
             'trainer_id' => $this->trainer ? $this->trainer->id : null

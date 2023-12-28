@@ -96,4 +96,10 @@ class SessionController extends Controller {
 
         return $text;
     }
+
+    public function allSessions(){
+        $sessions = Session::select('id', 'name')->get();
+
+        return response()->json(['data' => $sessions]);
+    }
 }
