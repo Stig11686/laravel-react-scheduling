@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\V1\TrainerController;
 use App\Http\Controllers\Api\V1\UserController;
 use App\Http\Controllers\Api\V1\ZoomRoomController;
 use App\Http\Controllers\Api\V1\TaskController;
+use App\Http\Controllers\Api\V1\AttendanceController;
 use App\Http\Resources\UserResource;
 
 /*
@@ -59,6 +60,7 @@ Route::middleware('auth:sanctum')->group(function(){
         Route::get('/trainersAll', [TrainerController::class, 'allTrainers']);
         Route::get('/cohortsAll', [CohortController::class, 'allCohorts']);
         Route::get('/coursesAll', [CourseController::class, 'allCourses']);
+        Route::get('/cohorts/{cohort}/attendance', [AttendanceController::class, 'getCohortAttendance']);
     });
 
     Route::resource('/schedule', ScheduleController::class);

@@ -23,7 +23,8 @@ class CohortWithLearnerResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'course' => $this->course->name,
-            'learners' => $learnerUsers
+            'learners' => $learnerUsers,
+            'allAttendance' => $this->allAttendance,
         ];
     }
 }

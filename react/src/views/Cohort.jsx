@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import Table from "../components/global/Table";
 import Loader from "../components/global/Loader";
 import axios from "../../axios";
+import RegisterOverview from "./RegisterOverview";
 
 function Cohort() {
     const [courseData, setCourseData] = useState(null);
@@ -50,6 +51,7 @@ function Cohort() {
                         <h3>Learners</h3>
                         <Table data={courseData.learners} />
                     </div>
+                    <RegisterOverview attendanceData={courseData.allAttendance} />
                 </>
             )}
         </div>

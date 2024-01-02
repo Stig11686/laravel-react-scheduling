@@ -45,7 +45,9 @@ class CohortController extends Controller {
     }
 
     public function show(Cohort $cohort){
-        return response()->json(['data' => new CohortWithLearnerResource( $cohort )])
+
+        $cohort = $cohort->load(['attendance', 'learners', 'cohortSession', 'sessions']);
+        return response()->json(['data' =>  new CohortWithLearnerResource($cohort), 'api_test' => 'changed received from github action!'])
         ->header('Access-Control-Allow-Origin', 'http://localhost:3000');
     }
 
