@@ -28,4 +28,9 @@ class CohortSession extends Model
     public function session(){
         return $this->belongsTo(Session::class);
     }
+
+    public function attendance()
+    {
+        return $this->hasMany(Attendance::class, 'session_id', 'id');
+    }
 }
