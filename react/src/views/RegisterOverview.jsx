@@ -64,7 +64,7 @@ return (
                         {/* Loop through sessions to render attendance status */}
                         {sessions.map(sessionId => {
                           const status = attendanceData[learnerId][sessionId].status;
-                            return (<td key={`${learnerId}-${sessionId}`} className={status === 'P' ? 'bg-green-200' : status === 'A'? 'bg-red-200' :''}>
+                            return (<td key={`${learnerId}-${sessionId}`} className={status === 'P' ? 'bg-green-200' : status === 'A'? 'bg-red-200' :'bg-gray-200'}>
                                 {status}
                             </td>
                         )})}

@@ -23,8 +23,7 @@ class CohortResource extends JsonResource
             'start_date' => $this->start_date,
             'end_date' => $this->end_date,
             'places' => $this->places,
-            'learners' => $this->learner_count,
-            'allAttendance' => $this->allAttendance,
+            'learners' => $this->learner_count
         ];
     }
 }
