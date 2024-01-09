@@ -60,7 +60,7 @@ Route::middleware('auth:sanctum')->group(function(){
         Route::get('/trainersAll', [TrainerController::class, 'allTrainers']);
         Route::get('/cohortsAll', [CohortController::class, 'allCohorts']);
         Route::get('/coursesAll', [CourseController::class, 'allCourses']);
-        Route::get('/cohorts/{cohort}/attendance', [AttendanceController::class, 'getCohortAttendance']);
+        Route::post('/cohorts/{cohort}/attendance', [AttendanceController::class, 'store']);
     });
 
     Route::resource('/schedule', ScheduleController::class);

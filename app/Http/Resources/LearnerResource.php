@@ -19,15 +19,23 @@ class LearnerResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
+            'end_date' => $this->learner->cohort->end_date,
             'outstanding_tasks' => 0,
-            $this->mergeWhen($this->learner->cohort->course->course_type->name === 'Apprenticeship',
-                 [
+            'learnerDetails' => $this->when($this->isApprenticeship(), function () {
+                return [
                     'coach' => $this->learner->trainer->user->name,
                     'portfolio_uploaded' => 0,
                     'employer' => $this->learner->employer ? $this->learner->employer->name : null,
                     'manager' => $this->learner->manager ? $this->learner->manager->name : null,
-                ]
-            ),
+                ];
+            }),
         ];
     }
+
+    private function isApprenticeship()
+    {
+        // Access course type based on the pre-loaded relationship
+        return $this->learner->cohort->course->course_type->name === 'Apprenticeship';
+    }
 }
+

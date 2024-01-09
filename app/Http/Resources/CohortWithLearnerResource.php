@@ -16,13 +16,12 @@ class CohortWithLearnerResource extends JsonResource
     public function toArray(Request $request): array
     {
         $learnerUsers = LearnerResource::collection(
-            User::whereIn('id', collect($this->learners)->pluck('user_id'))->get()
+            User::with(['learner', 'learner.cohort', 'learner.cohort.course', 'learner.cohort.course.course_type'])->whereIn('id', collect($this->learners)->pluck('user_id'))->get()
         );
 
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'course' => $this->course->name,
             'learners' => $learnerUsers,
             'allAttendance' => $this->allAttendance,
         ];

@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('session_task', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('session_id');
-            $table->foreignId('task_id');
+            $table->foreignId('session_id')->constrained('sessions')->cascadeOnDelete();
+            $table->foreignId('task_id')->constrained('tasks')->cascadeOnDelete();
             $table->timestamps();
         });
     }

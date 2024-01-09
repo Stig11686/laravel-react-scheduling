@@ -15,6 +15,7 @@ function Cohort() {
     useEffect(
         function () {
             async function fetchCourses() {
+                setIsLoading(true);
                 try {
                     axios
                         .get(`/cohorts/${id}`, {
@@ -23,9 +24,12 @@ function Cohort() {
                             },
                         })
                         .then((res) => setCourseData(res.data.data));
-                    setIsLoading(false);
                 } catch (error) {
+                    
                     setError(error);
+                } finally {
+                    setIsLoading(false);
+
                 }
             }
             fetchCourses();
@@ -51,7 +55,7 @@ function Cohort() {
                         <h3>Learners</h3>
                         <Table data={courseData.learners} />
                     </div>
-                    <RegisterOverview attendanceData={courseData.allAttendance} />
+                    <RegisterOverview id={id} loading={isLoading} attendanceData={courseData.allAttendance} />
                 </>
             )}
         </div>

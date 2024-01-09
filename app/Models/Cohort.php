@@ -41,13 +41,15 @@ class Cohort extends Model
         foreach ($learners as $learner) {
             foreach ($sessions as $session) {
                 $attendanceData[$learner->user->name][$session->session->name] = [
+                    'learner_id' => $learner->id,
                     'session_id' => $session->id,
+                    'learner_name' => $learner->user->name,
+                    'session_name' => $session->session->name, 
                     'session_date' => $session->date,
                     'status' => $attendance
                         ->where('session_id', $session->id)
                         ->where('learner_id', $learner->id)
                         ->first()?->status ?? ''
-                    // You can add other session details if needed
                 ];
             }
         }

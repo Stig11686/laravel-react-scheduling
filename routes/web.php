@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\V1\CohortController;
 
 /*
 |--------------------------------------------------------------------------
@@ -12,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
+Route::get('/test', [CohortController::class, 'show']);
 Route::get('/{any}', function () {
     return view('welcome'); // Assuming 'react_app' is the name of your Blade view for React
 })->where('any', '.*');

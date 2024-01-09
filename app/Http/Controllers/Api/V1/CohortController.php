@@ -7,6 +7,7 @@ use App\Http\Requests\CohortRequest;
 use App\Http\Resources\CohortCollection;
 use App\Http\Resources\CohortResource;
 use App\Http\Resources\CohortWithLearnerResource;
+use App\Http\Resources\CohortAttendanceResource;
 use App\Models\Cohort;
 use App\Models\Learner;
 
@@ -14,7 +15,7 @@ class CohortController extends Controller {
 
     public function index(){
         // Retrieve cohorts with the course relationship
-        $cohorts = Cohort::with('course')->paginate(10);
+        $cohorts = Cohort::with('course', 'learners')->paginate(10);
     
         // Retrieve the learner count separately for each cohort
         $cohortIds = $cohorts->pluck('id')->toArray();
@@ -45,11 +46,42 @@ class CohortController extends Controller {
     }
 
     public function show(Cohort $cohort){
-
-        $cohort = $cohort->load(['attendance', 'learners', 'cohortSession', 'sessions']);
+        $cohort = $cohort
+        ->with([
+            'course',
+            'course.course_type',
+            'attendance',
+            'learners', 
+            'learners.user',
+            'learners.trainer',
+            'learners.trainer.user',
+            'cohortSession.session.tasks',
+            'learners.user.employer'
+        ])
+        ->find($cohort->id);
+        
         return response()->json(['data' =>  new CohortWithLearnerResource($cohort), 'api_test' => 'changed received from github action!'])
         ->header('Access-Control-Allow-Origin', 'http://localhost:3000');
     }
+
+    // public function show(Cohort $cohort)
+    // {
+    //     $cohort = $cohort->load([
+    //         'learners.user',
+    //         'cohortSession',
+    //         'learners',
+    //         'cohortSession.session.tasks',
+    //         'attendance' => function ($query) use ($cohort) {
+    //             $query->select('learner_id', 'attendance.session_id', 'status')
+    //                 ->join('cohort_session as cs', function ($join) {
+    //                     $join->on('cs.id', '=', 'attendance.session_id');
+    //                 })
+    //                 ->where('cs.cohort_id', $cohort->id);
+    //         }
+    //     ]);
+    
+    //     return new CohortAttendanceResource($cohort);
+    // }
 
     public function store(CohortRequest $request){
         $cohort = new Cohort();
