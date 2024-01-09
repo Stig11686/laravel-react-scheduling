@@ -14,33 +14,39 @@ function Cohort() {
 
     useEffect(
         function () {
-            async function fetchCourses() {
-                setIsLoading(true);
-                try {
+            function fetchCourses() {
+
                     axios
                         .get(`/cohorts/${id}`, {
                             headers: {
                                 "Content-Type": "application/json",
                             },
                         })
-                        .then((res) => setCourseData(res.data.data));
-                } catch (error) {
-                    
-                    setError(error);
-                } finally {
-                    setIsLoading(false);
+                        .then((res) => {
+                            setIsLoading(true);
+                            setCourseData(res.data.data);
+                        })
+                        .catch((error) => {
+                            setError(error);
+                         })
+                         .finally(() => {
+                            setIsLoading(false);
+                        }) 
+                    }
 
-                }
-            }
             fetchCourses();
         },
         [id]
     );
+    
+    if(isLoading){
+        return <Loader />
+    }
 
     return (
+        
         <div>
             {error && <p>{error}</p>}
-            {isLoading && <Loader />}
             {courseData && (
                 <>
                     <div>
@@ -55,7 +61,7 @@ function Cohort() {
                         <h3>Learners</h3>
                         <Table data={courseData.learners} />
                     </div>
-                    <RegisterOverview id={id} loading={isLoading} attendanceData={courseData.allAttendance} />
+                    <RegisterOverview id={id} attendanceData={courseData.allAttendance} />
                 </>
             )}
         </div>

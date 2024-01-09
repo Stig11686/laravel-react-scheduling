@@ -2,9 +2,11 @@ import Loader from "../components/global/Loader";
 import { useState } from "react";
 import axios from "../../axios";
 
-const RegisterOverview = ({ id, loading, attendanceData }) => {
+
+const RegisterOverview = ({ id, attendanceData }) => {
   const [editedData, setEditedData] = useState(attendanceData);
   const [pendingUpdates, setPendingUpdates] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const updateAttendance = (learnerId, sessionId, learnerid, sessionid, status) => {
     const updatedData = {
@@ -21,16 +23,17 @@ const RegisterOverview = ({ id, loading, attendanceData }) => {
   };
 
   const sendUpdatesToServer = () => {
+    setIsLoading(true);
     axios
       .post(`/cohorts/${id}/attendance`, { pendingUpdates, cohort_id: id })
       .then(response => {
-        console.log('Updates sent successfully!', response.data);
-        // Handle any UI changes or state updates upon successful update
         setPendingUpdates([]); // Clear pendingUpdates after successful update
       })
       .catch(error => {
         console.error('Error sending updates:', error);
         // Handle error scenarios here
+      }).finally(() => {
+        setIsLoading(false);
       });
   };
 
@@ -64,7 +67,6 @@ const statusOptions = ['P', 'A', 'L',];
 
   return (
     <>
-      {loading && <Loader />}
       <div className="py-12">
         <h2 className="text-3xl mb-8">Register Overview</h2>
         <div className="overflow-x-auto">
@@ -115,10 +117,10 @@ const statusOptions = ['P', 'A', 'L',];
         </div>
         <button
             disabled={pendingUpdates.length === 0}
-            onClick={sendUpdatesToServer}
+            onClick={() => sendUpdatesToServer()}
             className="bg-blue-500 text-white px-4 py-2 mt-4 disabled:bg-gray-200"
           >
-            Save Register
+            {isLoading ? <Loader /> : 'Save Register'}
           </button>
       </div>
     </>
